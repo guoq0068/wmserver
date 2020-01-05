@@ -110,11 +110,17 @@
 
     <script type="text/javascript">
 
+      /**
+       * 根据地址选项，变更人名
+       */
       function construct_name_opt() {
         var select_index = $("#select_addr").get(0).selectedIndex;
         console.log("$select_name" + select_index);
         $("select[id^='select_name']").hide();
+        
+        
         $("#select_name" + select_index).show();
+        
       }
 
      $(function(){
@@ -128,7 +134,12 @@
 
       $("#btn").click(function(){
         var select_index = $("#select_addr").get(0).selectedIndex;
-        var confirmdata = $("#select_addr option:selected").text() + $("#select_name" + select_index).val() + "<br>"
+        select_index = "#select_name" + select_index;
+
+        $("select[id^='select_name']").attr("disabled","disabled");
+        $(select_index).removeAttr("disabled");
+
+        var confirmdata = $("#select_addr option:selected").text() + $(select_index).val() + "<br>"
             + $("#select_category option:selected").text() + $("#food_num").val() + "份<br> "
             + "\n米饭" + $("#rice_num").val() + "份<br>"
             +  "馒头" + $("#mantou_num").val() + "份";

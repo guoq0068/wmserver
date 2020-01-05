@@ -25,6 +25,7 @@ var getcontent = function(jsondata) {
 };
 
 router.post('/confirm', function(req, res, next) {
+  console.log(req.body);
   var content = getcontent(req.body);
 
   mdbmgr.addOrderInfo(req.body);
