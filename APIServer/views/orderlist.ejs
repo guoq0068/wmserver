@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="../stylesheets/css/weui.css"/>
+    <link rel="stylesheet" href="../stylesheets/css/weuix.css"/>
+
+    <script src="../javascripts/zepto.min.js"></script>
+    <script>
+        $(function(){
+        });
+    </script>
+</head>
+
+<body ontouchstart>
+    <div class="weui-cells">
+        <div class="weui-cell weui-cell_select weui-cell_select-after">
+            <div class="weui-cell__hd">
+                <label class="weui-label">地址</label>
+            </div>
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="select_addr" name="select_addr">
+                    <option value=1>4号楼</option>
+                    <option value=2>9号楼</option>
+                    <option value=3>乐天新玛特</option>
+                </select>
+            </div>
+        </div>
+    </div>  
+
+<table  id="table1">
+    <thead>
+    <tr><th>姓名</th><th>品类</th><th>份数</th><th>米饭数</th><th>馒头数</th></tr>
+    </thead>
+    <tbody id="addrbody_1">
+    </tbody>
+</table>
+
+<table  id="table2">
+    <thead>
+    <tr><th>姓名</th><th>品类</th><th>份数</th><th>米饭数</th><th>馒头数</th></tr>
+    </thead>
+    <tbody id="addrbody_2">
+        
+    </tbody>
+</table>
+
+<table  id="table3">
+    <thead>
+    <tr><th>姓名</th><th>品类</th><th>份数</th><th>米饭数</th><th>馒头数</th></tr>
+    </thead>
+    <tbody id="addrbody_3">
+    </tbody>
+</table>
+
+
+
+<br>
+<br>
+<script>
+  $(function(){
+      var addrs = ["4号楼","9号楼","乐天玛特"];
+      var listdata;
+      var index = 1;
+      $("#table1").hide();
+      $("#table2").hide();
+      $("#table3").hide();
+
+      $("#select_addr").change(function(){
+        $("#table1").hide();
+        $("#table2").hide();
+        $("#table3").hide();
+        var showtableid = "#table"+$("#select_addr").val();
+        $(showtableid).show();
+          
+      });
+      var showtableid = "#table"+$("#select_addr").val();
+      console.log( showtableid);
+
+      $("#table"+$("#select_addr").val()).show();
+
+        $.getJSON("http://www.vtuanba.cn/order/getlistdata", function(data){
+            console.log(data);
+            var cates = ["1荤1素","2荤1素","2荤2素"]
+            for(var i=0; i< data.length; i++) {
+                var item = data[i];
+                console.log(item.name);
+                var tr = $("<tr>");
+                var td = $("<td>").text(item.name);
+                tr.append(td);
+                td = $("<td>").text(item.order_category);
+                tr.append(td);
+
+
+                td = $("<td>").text(item.food_num);
+                tr.append(td);
+
+                td = $("<td>").text(item.rice_num);
+                tr.append(td);
+
+                td = $("<td>").text(item.mantou_num);
+                tr.append(td);
+                var tableid = "#addrbody_" + item.addr_id;
+                $(tableid).append(tr);
+
+                
+            }
+        });
+  }); 
+</script>
+</body>
+</html>

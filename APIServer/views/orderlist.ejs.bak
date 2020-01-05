@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="../stylesheets/css/weui.css"/>
+    <link rel="stylesheet" href="../stylesheets/css/weuix.css"/>
+
+    <script src="../javascripts/zepto.min.js"></script>
+    <script>
+        $(function(){
+        });
+    </script>
+</head>
+
+<body ontouchstart>
+<div class="page-hd">
+    <h1 class="page-hd-title">
+        当天订单列表
+    </h1>
+</div>
+
+<table class="weui-table">
+    <caption>1荤1素 </caption>
+    <thead>
+    <tr><th>地址</th><th>姓名</th><th>份数</th><th>米饭数</th><th>馒头数</th></tr>
+    </thead>
+    <tbody id="addrbody_0">
+        
+            <% for( var length = 0; length < results.length; length++) {%>
+                <tr>
+                <% item = results[length] %>
+                <td><%= addrs[item.addr_id - 1]%></td>
+                <td><%= item.name%></td>
+                <td><%= item.food_num%></td>
+                <td><%= item.rice_num%></td>
+                <td><%= item.mantou_num%></td>
+                </tr>
+            <% } %>
+    </tbody>
+</table>
+
+
+
+<br>
+<br>
+<script>
+  $(function(){
+    
+  }); 
+</script>
+</body>
+</html>
