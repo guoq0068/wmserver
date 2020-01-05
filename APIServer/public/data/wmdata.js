@@ -11,5 +11,6 @@ var names = [
 module.exports = {
     addrs : addrs,
     cates : cates,
-    names : names
+    names : names,
+    data: null
 };
