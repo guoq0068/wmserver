@@ -2,16 +2,18 @@ var express = require('express');
 var router = express.Router();
 var mdbmgr = require('../public/db/mdbmgr');
 var globalwww = require('../bin/www');
+var wmdat     = require('../public/data/wmdata');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('order', { title: '霞姐外卖' });
+
+  res.render('order', { title: '霞姐外卖', addrs: wmdat.addrs, cates:wmdat.cates, allname:wmdat.names});
 });
 
 var getcontent = function(jsondata) {
-  var addrs = ["4号楼", "9号楼", "乐天新玛特"];
+  var addrs = wmdat.addrs;
   var addr = addrs[jsondata.select_addr - 1];
-  var categorys = ["1荤1素", "2荤1素"];
+  var categorys = wmdat.cates;
   var cate = categorys[jsondata.select_category  - 1];
   var content = addr + 
     jsondata.select_name + " " +
@@ -24,8 +26,7 @@ var getcontent = function(jsondata) {
 
 router.post('/confirm', function(req, res, next) {
   var content = getcontent(req.body);
-  console.log(content);
-  console.log(req.body,"body");
+
   mdbmgr.addOrderInfo(req.body);
   globalwww.sendMess(req.body);
   res.render('ordersuccess',{content: content});

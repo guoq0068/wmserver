@@ -24,7 +24,6 @@
             </div>
             <div class="weui-cell__bd">
                 <select class="weui-select" id="select_addr" name="select_addr">
-                  <%  addrs = ["4号楼", "9号楼", "乐天玛特"] %>
                   <%  index = 1 %>
                   <% for(var addr in addrs){ %>
                       <option value = <%= index %> >
@@ -43,9 +42,18 @@
                 <label for="" class="weui-label">姓名</label>
             </div>
             <div class="weui-cell__bd">
-                <select class="weui-select" id="select_name" name="select_name">
+                <% index = 0 %>
+                <% for(var item in allname){ %>
+                <%  selectname = "select_name" + index %>
+                <%  names = allname[item] %>
+                <select class="weui-select" id="<%= selectname %>" name="select_name">
                     
+                    <% for(var name in names) { %>
+                      <option value="<%=names[name]%>"><%=names[name]%></option>
+                    <% } %>
                 </select>
+                <% index = index + 1 %>
+                <% } %>
             </div>
           </div>
 
@@ -55,7 +63,13 @@
             </div>
             <div class="weui-cell__bd">
                 <select class="weui-select" id="select_category" name="select_category">
-
+                  <%  index = 1 %>
+                  <% for(var cate in cates){ %>
+                      <option value = <%= index %> >
+                      <%= cates[cate] %>
+                      <% index = index + 1%>
+                      </option>
+                  <% } %>
                 </select>
             </div>
           </div>
@@ -96,46 +110,26 @@
 
     <script type="text/javascript">
 
-      function construct_name_opt(index) {
-        var names = [
-         ['阮老板', '王老板', '小安', '空调', '木门', '苏师傅', '安老板','王庆伟','老虎','于老板','刘老板 六楼'],
-         ['狂人', '毛老板', '我住隔壁', '扬子', '李老板', '王永辉','吴富平', '蒋存住', '结晶王老板', '刘月虎'],
-         ['顺其自然', '外立面', '刘世宏', '肯德基', '海浪', '安乃近', '马兵', '张建', '周泽宇', '听雨','涛声依旧','奋斗一生','思念想念','其他', '锋', '快乐', '春园', '林宇安装','张河','开拓']
-         ];
-          var name_opts = names[index];
-          $("#select_name").empty();
-          for ( var name of name_opts) {
-            var option = $("<option>").val(name).text(name);
-            $("#select_name").append(option);
-          }
+      function construct_name_opt() {
+        var select_index = $("#select_addr").get(0).selectedIndex;
+        console.log("$select_name" + select_index);
+        $("select[id^='select_name']").hide();
+        $("#select_name" + select_index).show();
       }
 
      $(function(){
-
-      
-      var addrs = ["4号楼", "9号楼", "乐天玛特"];
-
-
-      var category = ["1荤1素", "2荤1素"];
-      index = 1;
-      $("#select_category").empty();
-      for(var cat of category){
-        
-        var option = $("<option>").val(index).text(cat);
-        $("#select_category").append(option);   
-        index++;    
-      }
+      construct_name_opt();
 
       $("#select_addr").change(function(){
-          var index = $("#select_addr").val();
-          console.log(index);
-          construct_name_opt(index - 1);
+
+          construct_name_opt();
           
       });
 
       $("#btn").click(function(){
-        var confirmdata = addrs[$("#select_addr").val()-1] + $("#select_name").val() + "<br>"
-            + category[$("#select_category").val() - 1] + $("#food_num").val() + "份<br> "
+        var select_index = $("#select_addr").get(0).selectedIndex;
+        var confirmdata = $("#select_addr option:selected").text() + $("#select_name" + select_index).val() + "<br>"
+            + $("#select_category option:selected").text() + $("#food_num").val() + "份<br> "
             + "\n米饭" + $("#rice_num").val() + "份<br>"
             +  "馒头" + $("#mantou_num").val() + "份";
         $.confirm( confirmdata, "正确提交?", function() {
@@ -146,7 +140,7 @@
                 });
       });
 
-      construct_name_opt($("#select_addr").val() -1  );
+
 
 
     });
