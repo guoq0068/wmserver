@@ -13,6 +13,8 @@ var fs = require('fs');
 
 var WebSocket = require('ws');
 
+var mdbmgr = require("../public/db/mdbmgr");
+
 var clientws;
 /**
  * Get port from environment and store in Express.
@@ -27,11 +29,12 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', function(ws) {
   console.log('connection come');
-
+  mdbmgr.sendPrintData(sendMess);
   clientws = ws;
   const id = setInterval(function() {
     ws.send('message from server', function() {
@@ -40,21 +43,23 @@ wss.on('connection', function(ws) {
       //
       console.log('error occuputs');
     });
-  }, 1000);
+  }, 10000);
   console.log('started client interval');
+
+  
 
   ws.on('message', function(message) {
     //
     // Here we can now use session parameters.
     //
     console.log(`Received message ${message} from user `);
-    ws.send('message from server 2', function(){
-      console.log('error eccupys 2');
-    });
+    mdbmgr.updateOrderInfo(message);
+    
   });
 
   ws.on('close', function() {
     console.log('stopping client interval');
+    clientws = null;
     clearInterval(id);
   });
 });

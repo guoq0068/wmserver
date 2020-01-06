@@ -24,13 +24,23 @@ var getcontent = function(jsondata) {
   return content;
 };
 
+
+var  sendDataToClient = function(jsondata, res) {
+  var content = getcontent(jsondata);
+  jsondata.select_category = wmdat.cates[jsondata.select_category - 1];
+  jsondata.select_addr = wmdat.addrs[jsondata.select_addr -1 ];
+  console.log(jsondata)
+  globalwww.sendMess(jsondata);
+  res.render('ordersuccess',{content: content});
+}
+
 router.post('/confirm', function(req, res, next) {
   console.log(req.body);
-  var content = getcontent(req.body);
+  
 
-  mdbmgr.addOrderInfo(req.body);
-  globalwww.sendMess(req.body);
-  res.render('ordersuccess',{content: content});
+  mdbmgr.addOrderInfo(req.body,res, sendDataToClient);
+  
+
 });
 
 router.get('/getlist', function(req, res, next) {

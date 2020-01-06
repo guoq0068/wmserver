@@ -1,4 +1,5 @@
 var mysqlpool = require("../javascripts/mysqlpool");
+var wmdata = require("../data/wmdata");
 
 var updateUserInfo = function(jsonData) {
     var openid      = jsonData.openId;
@@ -132,7 +133,7 @@ var getOrderListData = function(res) {
  * @param {*} jsonData 
  */
 
-var addOrderInfo = function(jsonData) {
+var addOrderInfo = function(jsonData, res, senddata) {
 
     var timestamp = Date.now();
     var querystring = " insert into wm_order " +
@@ -147,11 +148,54 @@ var addOrderInfo = function(jsonData) {
     console.log(querystring);
 
     mysqlpool.query(querystring, null, function(err, result,fields){
-        console.log("err is " + err);
+        console.log(result.insertId);
+        
+        jsonData.insertId = result.insertId;
+        senddata(jsonData, res);
     });
-    
+};
+
+/**
+ * 设置状态为1，代表打印过
+ * @param {} jsonstring 
+ */
+var updateOrderInfo = function(jsonstring) {
+    try {
+        var jsondata = JSON.parse(jsonstring);
+        updateOrderInfoByid(jsondata.insertId);
+    }
+    catch(e) {
+        console.log(e);
+    }
+
+};
+
+var updateOrderInfoByid = function(id) {
+    var queryString = "update wm_order set status = 1 where id = '" + id + "'";
+    console.log(queryString);
+
+    mysqlpool.query(queryString, null, function(err, result, fields) {
+
+    });
+}
 
 
+var sendPrintData = function(sendmes) {
+
+    var queryString = "select * from wm_order where status = 0";
+    mysqlpool.query(queryString, null, function(err, result, fields) {
+        //console.log(result);
+        for(var single in result) {
+            var item = result[single];
+            var orderid  = item.id;
+            item.insertId = orderid;
+            item.select_addr = wmdata.addrs[item.select_addr];
+            item.select_category = wmdata.cates[item.select_category];
+            sendmes(item);
+            updateOrderInfoByid(orderid);
+        }
+ 
+    });
 };
 
 module.exports = {
@@ -160,5 +204,7 @@ module.exports = {
     getRole : getRole,
     addOrderInfo    : addOrderInfo,
     getOrderList : getOrderList,
-    getOrderListData: getOrderListData
+    getOrderListData: getOrderListData,
+    updateOrderInfo : updateOrderInfo,
+    sendPrintData : sendPrintData
 }
