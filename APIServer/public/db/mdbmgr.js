@@ -184,13 +184,15 @@ var sendPrintData = function(sendmes) {
 
     var queryString = "select * from wm_order where status = 0";
     mysqlpool.query(queryString, null, function(err, result, fields) {
-        //console.log(result);
+        
         for(var single in result) {
             var item = result[single];
             var orderid  = item.id;
+
             item.insertId = orderid;
-            item.select_addr = wmdata.addrs[item.select_addr];
-            item.select_category = wmdata.cates[item.select_category];
+            item.select_name = item.name;
+            item.select_addr = wmdata.addrs[item.addr_id - 1];
+            item.select_category = wmdata.cates[item.order_category - 1];
             sendmes(item);
             updateOrderInfoByid(orderid);
         }
