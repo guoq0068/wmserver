@@ -34,6 +34,31 @@ var updateUserInfo = function(jsonData) {
     });
 };
 
+var updataOpenidSessionkey = function(jsondata) {
+    var openid          = jsonData.openId;
+    var sessionkey      = jsonData.session_key;
+
+    var queryString = "select * from user_info where openid = '" + openid + "';";
+    console.log(queryString);
+    
+    mysqlpool.query(queryString, null, function(err, result, fields) {
+        if(err) {
+            console.log(err);
+            return err;
+        }
+        //如果结果为空，则插入数据
+        if(result.length == 0 ) {
+            queryString = 'insert into user_info(openid, sessionkey) values('
+                        + '"' + openid + '",'
+                        + '"' + sessionkey + '"'
+                        + ');';
+            console.log(queryString);                        
+            mysqlpool.query(queryString, null, function(err, result, fields){
+
+            });
+        }
+    });
+};
 
 var updataeRoleInfo = function(jsonData, mres) {
     var openid = jsonData.openid;

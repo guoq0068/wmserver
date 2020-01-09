@@ -44,8 +44,8 @@ router.get('/push', function(req, res, next) {
  */
 router.get('/login', function(req, res, next) {
     var arg = url.parse(req.url, true ).query;
-    var iv  = arg.iv;
-    var encryptedData = arg.encryptedData;
+    //var iv  = arg.iv;
+    //var encryptedData = arg.encryptedData;
     var mres = res;
 
     var data = {
@@ -76,10 +76,13 @@ router.get('/login', function(req, res, next) {
             console.log(session_key);
             var pc = new WXBizDataCrypt(wxconfig.appid, session_key);
 
-            var data = pc.decryptData(encryptedData, iv);
             console.log(data);
-            dbmgr.updateUserInfo(data);
-            dbmgr.getRole(data, mres);
+            var newdata = {};
+            newdata.openid = data.openid;
+            
+            mres.send(JSON.stringify(newdata));
+            //dbmgr.updateUserInfo(data);
+            //dbmgr.getRole(data, mres);
         }
     });
 
