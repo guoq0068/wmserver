@@ -16,11 +16,20 @@ var WebSocket = require('ws');
 var mdbmgr = require("../public/db/mdbmgr");
 
 var clientws;
+
+var HTTP_PORT_DEV = 8080;
+var HTTPS_PORT_DEV = 446;
+var HTTP_PORT = 80;
+var HTTPS_PORT = 443;
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '80');
+var port_https = HTTPS_PORT;
+//add-start-dev
+port = HTTP_PORT;
+//add-end-dev
 app.set('port', port);
 
 /**
@@ -85,7 +94,7 @@ var options = {
 };
 
 var httpsserver = https.createServer(options, app);
-httpsserver.listen(443);
+httpsserver.listen(port_https);
 
 /**
  * Normalize a port into a number, string, or false.

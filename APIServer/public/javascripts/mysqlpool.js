@@ -3,7 +3,8 @@ var pool = mysql.createPool({
     host     : 'localhost',
     user     : 'root',
     password : 'abc123',
-    database : 'xc_mi'
+    database : 'xc_mi'  //for devoplement xc_mi_dev
+    //
 });
 
 var query=function(sql,options,callback){

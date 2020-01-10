@@ -37,6 +37,16 @@ router.get('/push', function(req, res, next) {
     }
 });
 
+
+router.get('/getunionid', function(req, res, next) {
+    var arg = url.parse(req.url, true ).query;
+    var iv  = arg.iv;
+    var encryptedData = arg.encryptedData;
+    var openid      =   arg.openid;
+    var session_key =   get_sessionkey(openid);   
+});
+
+
 /*
   微信小程序登录
   req: getuserinfo的加密数据

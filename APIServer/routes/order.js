@@ -52,4 +52,9 @@ router.get('/getlistdata', function(req, res, next){
   mdbmgr.getOrderListData(res);
 });
 
+router.get('/getaddrname', function(req, res, next){
+
+  res.send(JSON.stringify(wmdat));
+});
+
 module.exports = router;
